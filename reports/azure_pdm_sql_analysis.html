@@ -1,0 +1,193 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azure Predictive Maintenance — SQL Analytics</title><style>body{font:16px/1.65 system-ui,sans-serif;color:#18364b;background:#f5f8fc;margin:0}main{max-width:1100px;margin:auto;padding:40px 24px}h1{font-size:36px;line-height:1.2}h2{margin-top:40px}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;background:white;font-size:14px}th,td{padding:10px;border-bottom:1px solid #dbe4ed;text-align:left}th{background:#e7eef5}.scroll{overflow-x:auto}a{color:#236b8e}.note{padding:18px;background:#e7eef5;border-left:4px solid #236b8e}</style></head><body><main>
+<h1>Azure Predictive Maintenance<br>SQL Reliability Analytics</h1><p>Ozan Berk Aydin · PostgreSQL 16 · Intermediate SQL · Verified 3 October 2026</p>
+<p class="note">Retrospective analysis of a synthetic dataset: 100 machines, 876,100 telemetry readings and 761 component failure records. Results describe associations, not causal effects or validated predictions.</p>
+<p><a href="../README.md">Project documentation</a> · <a href="../sql/00_schemas.sql">SQL analysis</a></p>
+<img src="../assets/figures/model-failure-rates.svg" alt="model failure rates">
+<img src="../assets/figures/component-failure-share.svg" alt="component failure share">
+<img src="../assets/figures/maintenance-observed-age.svg" alt="maintenance observed age">
+<h2>Data Quality Summary</h2><p><a href="results/data_quality_summary.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>metric</th><th>value</th></tr></thead><tbody>
+<tr><td>machines</td><td>100</td></tr>
+<tr><td>telemetry_rows</td><td>876100</td></tr>
+<tr><td>error_rows</td><td>3919</td></tr>
+<tr><td>maintenance_rows</td><td>3286</td></tr>
+<tr><td>failure_rows</td><td>761</td></tr>
+<tr><td>telemetry_start</td><td>2015-01-01 06:00:00</td></tr>
+<tr><td>telemetry_end</td><td>2016-01-01 06:00:00</td></tr>
+<tr><td>maintenance_before_telemetry</td><td>400</td></tr>
+<tr><td>off_grid_readings</td><td>0</td></tr>
+<tr><td>machines_with_missing_hours</td><td>0</td></tr>
+</tbody></table></div>
+<h2>Model Failure Rates</h2><p><a href="results/model_failure_rates.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>model</th><th>machine_count</th><th>failure_count</th><th>failures_per_machine</th></tr></thead><tbody>
+<tr><td>model1</td><td>16</td><td>189</td><td>11.813</td></tr>
+<tr><td>model2</td><td>17</td><td>168</td><td>9.882</td></tr>
+<tr><td>model3</td><td>35</td><td>221</td><td>6.314</td></tr>
+<tr><td>model4</td><td>32</td><td>183</td><td>5.719</td></tr>
+</tbody></table></div>
+<h2>Component Failure Share</h2><p><a href="results/component_failure_share.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>component</th><th>failure_count</th><th>failure_pct</th></tr></thead><tbody>
+<tr><td>comp2</td><td>259</td><td>34.03</td></tr>
+<tr><td>comp1</td><td>192</td><td>25.23</td></tr>
+<tr><td>comp4</td><td>179</td><td>23.52</td></tr>
+<tr><td>comp3</td><td>131</td><td>17.21</td></tr>
+</tbody></table></div>
+<h2>Reliability Summary</h2><p><a href="results/reliability_summary.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>component_failure_rows</th><th>distinct_failure_events</th><th>complete_event_intervals</th><th>fleet_event_mtbf_hours</th><th>failure_free_machines</th></tr></thead><tbody>
+<tr><td>761</td><td>719</td><td>621</td><td>1107.29</td><td>2</td></tr>
+</tbody></table></div>
+<h2>Machine Mtbf</h2><p><a href="results/machine_mtbf.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>machine_id</th><th>complete_intervals</th><th>mtbf_hours</th></tr></thead><tbody>
+<tr><td>1</td><td>6</td><td>1380.00</td></tr>
+<tr><td>2</td><td>2</td><td>3420.00</td></tr>
+<tr><td>3</td><td>4</td><td>1980.00</td></tr>
+<tr><td>4</td><td>5</td><td>1296.00</td></tr>
+<tr><td>5</td><td>6</td><td>1260.00</td></tr>
+<tr><td>7</td><td>8</td><td>990.00</td></tr>
+<tr><td>8</td><td>4</td><td>1350.00</td></tr>
+<tr><td>9</td><td>8</td><td>855.00</td></tr>
+<tr><td>10</td><td>4</td><td>900.00</td></tr>
+<tr><td>11</td><td>4</td><td>1980.00</td></tr>
+<tr><td>12</td><td>4</td><td>1620.00</td></tr>
+<tr><td>13</td><td>9</td><td>680.00</td></tr>
+<tr><td>14</td><td>3</td><td>1440.00</td></tr>
+<tr><td>15</td><td>4</td><td>2070.00</td></tr>
+<tr><td>16</td><td>10</td><td>792.30</td></tr>
+<tr><td>17</td><td>12</td><td>718.25</td></tr>
+<tr><td>18</td><td>7</td><td>925.71</td></tr>
+<tr><td>19</td><td>6</td><td>1320.00</td></tr>
+<tr><td>20</td><td>12</td><td>720.00</td></tr>
+<tr><td>21</td><td>9</td><td>880.00</td></tr>
+<tr><td>22</td><td>12</td><td>640.25</td></tr>
+<tr><td>23</td><td>11</td><td>752.73</td></tr>
+<tr><td>24</td><td>9</td><td>880.00</td></tr>
+<tr><td>25</td><td>5</td><td>1296.00</td></tr>
+<tr><td>26</td><td>5</td><td>1080.00</td></tr>
+<tr><td>27</td><td>2</td><td>540.00</td></tr>
+<tr><td>28</td><td>4</td><td>1710.00</td></tr>
+<tr><td>29</td><td>1</td><td>6480.00</td></tr>
+<tr><td>30</td><td>3</td><td>2640.00</td></tr>
+<tr><td>31</td><td>5</td><td>1152.00</td></tr>
+<tr><td>32</td><td>8</td><td>900.00</td></tr>
+<tr><td>33</td><td>7</td><td>1028.57</td></tr>
+<tr><td>34</td><td>2</td><td>2520.00</td></tr>
+<tr><td>35</td><td>9</td><td>691.00</td></tr>
+<tr><td>36</td><td>3</td><td>1560.00</td></tr>
+<tr><td>37</td><td>13</td><td>636.92</td></tr>
+<tr><td>38</td><td>5</td><td>1584.00</td></tr>
+<tr><td>39</td><td>3</td><td>2160.00</td></tr>
+<tr><td>40</td><td>8</td><td>1035.00</td></tr>
+<tr><td>41</td><td>2</td><td>3240.00</td></tr>
+<tr><td>42</td><td>8</td><td>990.00</td></tr>
+<tr><td>43</td><td>9</td><td>760.00</td></tr>
+<tr><td>44</td><td>3</td><td>1320.00</td></tr>
+<tr><td>45</td><td>6</td><td>1220.50</td></tr>
+<tr><td>46</td><td>1</td><td>6480.00</td></tr>
+<tr><td>47</td><td>9</td><td>880.00</td></tr>
+<tr><td>48</td><td>6</td><td>1200.00</td></tr>
+<tr><td>49</td><td>10</td><td>720.00</td></tr>
+<tr><td>50</td><td>3</td><td>2040.00</td></tr>
+<tr><td>51</td><td>9</td><td>917.67</td></tr>
+<tr><td>52</td><td>4</td><td>2070.00</td></tr>
+<tr><td>53</td><td>5</td><td>1224.00</td></tr>
+<tr><td>54</td><td>4</td><td>2070.00</td></tr>
+<tr><td>55</td><td>7</td><td>925.71</td></tr>
+<tr><td>56</td><td>9</td><td>952.33</td></tr>
+<tr><td>57</td><td>1</td><td>6480.00</td></tr>
+<tr><td>58</td><td>7</td><td>1179.86</td></tr>
+<tr><td>59</td><td>7</td><td>987.86</td></tr>
+<tr><td>60</td><td>3</td><td>1800.00</td></tr>
+<tr><td>61</td><td>3</td><td>2160.00</td></tr>
+<tr><td>62</td><td>6</td><td>1380.00</td></tr>
+<tr><td>63</td><td>6</td><td>1140.00</td></tr>
+<tr><td>64</td><td>7</td><td>1234.29</td></tr>
+<tr><td>65</td><td>4</td><td>1080.00</td></tr>
+<tr><td>66</td><td>3</td><td>2400.00</td></tr>
+<tr><td>67</td><td>8</td><td>810.00</td></tr>
+<tr><td>68</td><td>3</td><td>2040.00</td></tr>
+<tr><td>69</td><td>9</td><td>800.00</td></tr>
+<tr><td>70</td><td>4</td><td>1890.00</td></tr>
+<tr><td>71</td><td>11</td><td>589.09</td></tr>
+<tr><td>72</td><td>1</td><td>3960.00</td></tr>
+<tr><td>73</td><td>11</td><td>720.27</td></tr>
+<tr><td>74</td><td>5</td><td>1296.00</td></tr>
+<tr><td>75</td><td>8</td><td>855.00</td></tr>
+<tr><td>76</td><td>8</td><td>945.00</td></tr>
+<tr><td>78</td><td>8</td><td>945.00</td></tr>
+<tr><td>79</td><td>9</td><td>920.33</td></tr>
+<tr><td>80</td><td>4</td><td>2046.75</td></tr>
+<tr><td>81</td><td>7</td><td>1182.86</td></tr>
+<tr><td>82</td><td>3</td><td>2520.00</td></tr>
+<tr><td>83</td><td>11</td><td>783.55</td></tr>
+<tr><td>84</td><td>6</td><td>1080.00</td></tr>
+<tr><td>85</td><td>10</td><td>828.00</td></tr>
+<tr><td>86</td><td>3</td><td>2569.00</td></tr>
+<tr><td>87</td><td>8</td><td>1065.38</td></tr>
+<tr><td>88</td><td>7</td><td>1182.86</td></tr>
+<tr><td>89</td><td>6</td><td>1140.00</td></tr>
+<tr><td>90</td><td>10</td><td>828.00</td></tr>
+<tr><td>91</td><td>5</td><td>1296.00</td></tr>
+<tr><td>92</td><td>7</td><td>977.14</td></tr>
+<tr><td>93</td><td>5</td><td>504.00</td></tr>
+<tr><td>94</td><td>9</td><td>936.33</td></tr>
+<tr><td>95</td><td>8</td><td>945.00</td></tr>
+<tr><td>96</td><td>4</td><td>1890.00</td></tr>
+<tr><td>97</td><td>6</td><td>1200.00</td></tr>
+<tr><td>98</td><td>13</td><td>553.85</td></tr>
+<tr><td>99</td><td>18</td><td>461.50</td></tr>
+<tr><td>100</td><td>2</td><td>3600.00</td></tr>
+</tbody></table></div>
+<h2>Maintenance Reactive Rates</h2><p><a href="results/maintenance_reactive_rates.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>model</th><th>maintenance_count</th><th>reactive_count</th><th>reactive_ratio</th></tr></thead><tbody>
+<tr><td>model1</td><td>458</td><td>181</td><td>0.3952</td></tr>
+<tr><td>model2</td><td>485</td><td>165</td><td>0.3402</td></tr>
+<tr><td>model3</td><td>1032</td><td>216</td><td>0.2093</td></tr>
+<tr><td>model4</td><td>911</td><td>181</td><td>0.1987</td></tr>
+</tbody></table></div>
+<h2>Maintenance Observed Component Age</h2><p><a href="results/maintenance_observed_component_age.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>previous_change_type</th><th>observed_failures</th><th>average_days_to_failure</th></tr></thead><tbody>
+<tr><td>proactive</td><td>511</td><td>97.84</td></tr>
+<tr><td>reactive</td><td>250</td><td>70.56</td></tr>
+</tbody></table></div>
+<h2>Error Window Sensitivity</h2><p><a href="results/error_window_sensitivity.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>strict_leading_error_count</th><th>inclusive_error_count</th><th>same_timestamp_difference</th></tr></thead><tbody>
+<tr><td>1177</td><td>1181</td><td>4</td></tr>
+</tbody></table></div>
+<h2>Error Lift Top10</h2><p><a href="results/error_lift_top10.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>component</th><th>error_id</th><th>pre_failure_errors_per_day</th><th>baseline_errors_per_machine_day</th><th>lift</th></tr></thead><tbody>
+<tr><td>comp4</td><td>error5</td><td>0.9888</td><td>0.009753</td><td>101.38</td></tr>
+<tr><td>comp3</td><td>error4</td><td>0.9924</td><td>0.019918</td><td>49.82</td></tr>
+<tr><td>comp2</td><td>error3</td><td>0.9961</td><td>0.022959</td><td>43.39</td></tr>
+<tr><td>comp2</td><td>error2</td><td>1.0000</td><td>0.027068</td><td>36.94</td></tr>
+<tr><td>comp1</td><td>error1</td><td>0.9792</td><td>0.027671</td><td>35.39</td></tr>
+<tr><td>comp2</td><td>error5</td><td>0.0541</td><td>0.009753</td><td>5.54</td></tr>
+<tr><td>comp4</td><td>error3</td><td>0.1173</td><td>0.022959</td><td>5.11</td></tr>
+<tr><td>comp3</td><td>error5</td><td>0.0458</td><td>0.009753</td><td>4.70</td></tr>
+<tr><td>comp4</td><td>error2</td><td>0.1061</td><td>0.027068</td><td>3.92</td></tr>
+<tr><td>comp1</td><td>error5</td><td>0.0313</td><td>0.009753</td><td>3.20</td></tr>
+</tbody></table></div>
+<h2>Telemetry Pre Failure Percentage Changes</h2><p><a href="results/telemetry_pre_failure_percentage_changes.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>component</th><th>failures_with_telemetry</th><th>volt_change_pct</th><th>rotate_change_pct</th><th>pressure_change_pct</th><th>vibration_change_pct</th></tr></thead><tbody>
+<tr><td>comp1</td><td>192</td><td>11.76</td><td>-0.88</td><td>0.67</td><td>0.26</td></tr>
+<tr><td>comp2</td><td>259</td><td>0.28</td><td>-17.39</td><td>0.68</td><td>0.99</td></tr>
+<tr><td>comp3</td><td>131</td><td>0.37</td><td>-0.75</td><td>23.90</td><td>0.01</td></tr>
+<tr><td>comp4</td><td>179</td><td>0.09</td><td>-1.17</td><td>0.21</td><td>24.42</td></tr>
+</tbody></table></div>
+<h2>Top Maintenance Priorities</h2><p><a href="results/top_maintenance_priorities.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>machine_id</th><th>model</th><th>age</th><th>n_failures</th><th>mtbf_hours</th><th>reactive_ratio</th><th>errors_per_day</th><th>priority_score</th><th>maintenance_priority</th></tr></thead><tbody>
+<tr><td>99</td><td>model1</td><td>14</td><td>19</td><td>461.50</td><td>0.6000</td><td>0.1479</td><td>26.48</td><td>high</td></tr>
+<tr><td>98</td><td>model2</td><td>20</td><td>16</td><td>553.85</td><td>0.4848</td><td>0.1233</td><td>22.08</td><td>high</td></tr>
+<tr><td>22</td><td>model1</td><td>14</td><td>15</td><td>640.25</td><td>0.4828</td><td>0.1644</td><td>21.47</td><td>high</td></tr>
+<tr><td>17</td><td>model1</td><td>14</td><td>15</td><td>718.25</td><td>0.5000</td><td>0.1342</td><td>21.34</td><td>high</td></tr>
+<tr><td>37</td><td>model1</td><td>16</td><td>14</td><td>636.92</td><td>0.4516</td><td>0.1178</td><td>19.69</td><td>high</td></tr>
+<tr><td>83</td><td>model4</td><td>18</td><td>14</td><td>783.55</td><td>0.4333</td><td>0.1205</td><td>19.54</td><td>high</td></tr>
+<tr><td>20</td><td>model2</td><td>16</td><td>13</td><td>720.00</td><td>0.4483</td><td>0.1288</td><td>18.77</td><td>high</td></tr>
+<tr><td>71</td><td>model2</td><td>18</td><td>13</td><td>589.09</td><td>0.4483</td><td>0.1233</td><td>18.72</td><td>high</td></tr>
+<tr><td>13</td><td>model1</td><td>15</td><td>13</td><td>680.00</td><td>0.4483</td><td>0.1151</td><td>18.63</td><td>high</td></tr>
+<tr><td>16</td><td>model1</td><td>3</td><td>13</td><td>792.30</td><td>0.4400</td><td>0.1123</td><td>18.52</td><td>high</td></tr>
+</tbody></table></div>
+<h2>Kpi Grain Validation</h2><p><a href="results/kpi_grain_validation.csv">Download CSV</a></p><div class="scroll"><table>
+<thead><tr><th>machines_in_view</th><th>view_failure_sum</th><th>source_failure_count</th></tr></thead><tbody>
+<tr><td>100</td><td>761</td><td>761</td></tr>
+</tbody></table></div>
+<h2>Definitions and limitations</h2><p>MTBF uses distinct machine timestamps and complete observed intervals. Maintenance ratios exclude 400 replacements before telemetry starts; those historical replacements remain available for component-age calculations. Leading errors exclude the failure timestamp. Sensor changes compare pre-failure means with the machine’s full-period mean and are retrospective percentages, not standardized scores.</p><p>Observed component age includes failures with a known prior replacement and omits components still operating. It is not a survival estimate or time to the next failure after every replacement. Priority weights and thresholds are illustrative. Full-period baselines include future observations and must not be used directly in a forecasting model. The one-year synthetic dataset has no production validation.</p><p>The MIT license applies to code and documentation; source data remain subject to the dataset publisher’s terms.</p></main></body></html>

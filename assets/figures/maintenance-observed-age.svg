@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="279" viewBox="0 0 920 279" role="img" aria-labelledby="title desc">
+<title id="title">Observed component age at failure</title><desc id="desc">Days since the latest replacement; only components that later failed. proactive: 97.840; reactive: 70.560</desc>
+<rect width="100%" height="100%" fill="#f5f8fc"/>
+<text x="32" y="40" font-family="Arial,sans-serif" font-size="25" font-weight="bold" fill="#18364b">Observed component age at failure</text>
+<text x="32" y="70" font-family="Arial,sans-serif" font-size="15" fill="#475569">Days since the latest replacement; only components that later failed</text>
+<text x="32" y="124" font-family="Arial,sans-serif" font-size="16" fill="#18364b">proactive</text>
+<rect x="230" y="100" width="487.0" height="34" rx="5" fill="#93643a"/>
+<text x="727.0" y="124" font-family="Arial,sans-serif" font-size="16" fill="#18364b">97.840</text>
+<text x="32" y="186" font-family="Arial,sans-serif" font-size="16" fill="#18364b">reactive</text>
+<rect x="230" y="162" width="351.2" height="34" rx="5" fill="#93643a"/>
+<text x="591.2" y="186" font-family="Arial,sans-serif" font-size="16" fill="#18364b">70.560</text>
+<text x="32" y="259" font-family="Arial,sans-serif" font-size="13" fill="#475569">Source: PostgreSQL query outputs | Synthetic Azure PdM dataset</text>
+</svg>

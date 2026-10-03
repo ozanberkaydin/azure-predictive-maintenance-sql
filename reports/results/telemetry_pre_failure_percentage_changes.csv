@@ -1,0 +1,5 @@
+component,failures_with_telemetry,volt_change_pct,rotate_change_pct,pressure_change_pct,vibration_change_pct
+comp1,192,11.76,-0.88,0.67,0.26
+comp2,259,0.28,-17.39,0.68,0.99
+comp3,131,0.37,-0.75,23.90,0.01
+comp4,179,0.09,-1.17,0.21,24.42

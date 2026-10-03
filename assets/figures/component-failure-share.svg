@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="403" viewBox="0 0 920 403" role="img" aria-labelledby="title desc">
+<title id="title">Component failure share</title><desc id="desc">Percentage of 761 component failure records. comp2: 34.030; comp1: 25.230; comp4: 23.520; comp3: 17.210</desc>
+<rect width="100%" height="100%" fill="#f5f8fc"/>
+<text x="32" y="40" font-family="Arial,sans-serif" font-size="25" font-weight="bold" fill="#18364b">Component failure share</text>
+<text x="32" y="70" font-family="Arial,sans-serif" font-size="15" fill="#475569">Percentage of 761 component failure records</text>
+<text x="32" y="124" font-family="Arial,sans-serif" font-size="16" fill="#18364b">comp2</text>
+<rect x="230" y="100" width="487.0" height="34" rx="5" fill="#2d8268"/>
+<text x="727.0" y="124" font-family="Arial,sans-serif" font-size="16" fill="#18364b">34.030</text>
+<text x="32" y="186" font-family="Arial,sans-serif" font-size="16" fill="#18364b">comp1</text>
+<rect x="230" y="162" width="361.0" height="34" rx="5" fill="#2d8268"/>
+<text x="601.0" y="186" font-family="Arial,sans-serif" font-size="16" fill="#18364b">25.230</text>
+<text x="32" y="248" font-family="Arial,sans-serif" font-size="16" fill="#18364b">comp4</text>
+<rect x="230" y="224" width="336.6" height="34" rx="5" fill="#2d8268"/>
+<text x="576.6" y="248" font-family="Arial,sans-serif" font-size="16" fill="#18364b">23.520</text>
+<text x="32" y="310" font-family="Arial,sans-serif" font-size="16" fill="#18364b">comp3</text>
+<rect x="230" y="286" width="246.3" height="34" rx="5" fill="#2d8268"/>
+<text x="486.3" y="310" font-family="Arial,sans-serif" font-size="16" fill="#18364b">17.210</text>
+<text x="32" y="383" font-family="Arial,sans-serif" font-size="13" fill="#475569">Source: PostgreSQL query outputs | Synthetic Azure PdM dataset</text>
+</svg>

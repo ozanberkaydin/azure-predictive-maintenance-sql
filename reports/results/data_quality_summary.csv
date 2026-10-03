@@ -1,0 +1,11 @@
+metric,value
+machines,100
+telemetry_rows,876100
+error_rows,3919
+maintenance_rows,3286
+failure_rows,761
+telemetry_start,2015-01-01 06:00:00
+telemetry_end,2016-01-01 06:00:00
+maintenance_before_telemetry,400
+off_grid_readings,0
+machines_with_missing_hours,0

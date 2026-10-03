@@ -1,0 +1,5 @@
+model,maintenance_count,reactive_count,reactive_ratio
+model1,458,181,0.3952
+model2,485,165,0.3402
+model3,1032,216,0.2093
+model4,911,181,0.1987

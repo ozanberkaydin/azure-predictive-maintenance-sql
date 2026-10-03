@@ -1,0 +1,11 @@
+component,error_id,pre_failure_errors_per_day,baseline_errors_per_machine_day,lift
+comp4,error5,0.9888,0.009753,101.38
+comp3,error4,0.9924,0.019918,49.82
+comp2,error3,0.9961,0.022959,43.39
+comp2,error2,1.0000,0.027068,36.94
+comp1,error1,0.9792,0.027671,35.39
+comp2,error5,0.0541,0.009753,5.54
+comp4,error3,0.1173,0.022959,5.11
+comp3,error5,0.0458,0.009753,4.70
+comp4,error2,0.1061,0.027068,3.92
+comp1,error5,0.0313,0.009753,3.20

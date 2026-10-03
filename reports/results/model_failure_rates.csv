@@ -1,0 +1,5 @@
+model,machine_count,failure_count,failures_per_machine
+model1,16,189,11.813
+model2,17,168,9.882
+model3,35,221,6.314
+model4,32,183,5.719

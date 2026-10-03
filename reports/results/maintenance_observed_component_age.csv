@@ -1,0 +1,3 @@
+previous_change_type,observed_failures,average_days_to_failure
+proactive,511,97.84
+reactive,250,70.56

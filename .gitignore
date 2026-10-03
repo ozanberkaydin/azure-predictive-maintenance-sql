@@ -1,0 +1,8 @@
+raw_data/*
+!raw_data/README.md
+.idea/
+.vscode/
+.env
+.env.*
+.DS_Store
+Thumbs.db

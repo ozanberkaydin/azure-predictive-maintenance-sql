@@ -1,0 +1,11 @@
+machine_id,model,age,n_failures,mtbf_hours,reactive_ratio,errors_per_day,priority_score,maintenance_priority
+99,model1,14,19,461.50,0.6000,0.1479,26.48,high
+98,model2,20,16,553.85,0.4848,0.1233,22.08,high
+22,model1,14,15,640.25,0.4828,0.1644,21.47,high
+17,model1,14,15,718.25,0.5000,0.1342,21.34,high
+37,model1,16,14,636.92,0.4516,0.1178,19.69,high
+83,model4,18,14,783.55,0.4333,0.1205,19.54,high
+20,model2,16,13,720.00,0.4483,0.1288,18.77,high
+71,model2,18,13,589.09,0.4483,0.1233,18.72,high
+13,model1,15,13,680.00,0.4483,0.1151,18.63,high
+16,model1,3,13,792.30,0.4400,0.1123,18.52,high
