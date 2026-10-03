@@ -1,0 +1,3 @@
+*.sql linguist-language=SQL
+reports/** linguist-documentation
+assets/** linguist-documentation
