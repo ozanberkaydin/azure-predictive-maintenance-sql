@@ -2,7 +2,7 @@
 
 ## Project overview
 
-A PostgreSQL portfolio project that explores machine reliability, maintenance history, errors and sensor readings using **intermediate SQL**. The analysis uses the synthetic Microsoft Azure Predictive Maintenance dataset and keeps the calculations readable with `JOIN`, `GROUP BY`, `CASE`, subqueries, short CTEs and reusable views.
+A PostgreSQL portfolio project that explores machine reliability, maintenance history, errors and sensor readings using **Postgre SQL**. The analysis uses the synthetic Microsoft Azure Predictive Maintenance dataset and keeps the calculations readable with `JOIN`, `GROUP BY`, `CASE`, subqueries, short CTEs and reusable views.
 
 The questions are practical: which machine models have the greatest failure burden, how component age differs by replacement type, and which errors and sensor changes appear before recorded failures. All analytical calculations run in SQL.
 
